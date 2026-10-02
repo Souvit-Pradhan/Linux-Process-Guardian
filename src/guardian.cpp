@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <thread>
 #include <chrono>
+#include <fcntl.h>
 
 using namespace std;
 
@@ -190,6 +191,29 @@ vector<ProcessInfo> getProcesses()
     return processes;
 }
 
+string getDriverStatus()
+{
+    int fd = open("/dev/procguard", O_RDONLY);
+
+    if (fd < 0)
+    {
+        return "NOT CONNECTED";
+    }
+
+    char buffer[128] = {0};
+
+    ssize_t bytesRead = read(fd, buffer, sizeof(buffer) - 1);
+
+    close(fd);
+
+    if (bytesRead <= 0)
+    {
+        return "NO RESPONSE";
+    }
+
+    return string(buffer);
+}
+
 int main()
 {
     cout << "\n";
@@ -200,7 +224,10 @@ int main()
 
     const long MEMORY_THRESHOLD = 500000;
     const double CPU_THRESHOLD = 80.0;
+    string driverStatus = getDriverStatus();
 
+    cout << "Driver Status    : "
+         << driverStatus;
     cout << "Collecting CPU information...\n";
     cout << "Please wait 1 second...\n\n";
 
