@@ -8,11 +8,17 @@
 #define DEVICE_NAME "procguard"
 
 static char message[256] = "Process Guardian Driver Active\n";
+static unsigned int open_count = 0;
+static unsigned int read_count = 0;
 
 /* Called when the device is opened */
 static int procguard_open(struct inode *inode, struct file *file)
 {
+    open_count++;
+
     pr_info("procguard: device opened\n");
+    pr_info("procguard: open count = %u\n", open_count);
+
     return 0;
 }
 
@@ -22,6 +28,7 @@ static ssize_t procguard_read(struct file *file,
                               size_t length,
                               loff_t *offset)
 {
+    read_count++;
     size_t message_length = strlen(message);
 
     if (*offset >= message_length)
@@ -58,6 +65,7 @@ static struct miscdevice procguard_device = {
     .minor = MISC_DYNAMIC_MINOR,
     .name = DEVICE_NAME,
     .fops = &procguard_fops,
+    .mode = 0666,
 };
 
 /* Driver initialization */
