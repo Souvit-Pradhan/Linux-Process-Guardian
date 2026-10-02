@@ -1,0 +1,12 @@
+# C++ build output
+src/guardian
+
+# Linux kernel module build output
+driver/*.o
+driver/*.ko
+driver/*.mod
+driver/*.mod.c
+driver/Module.symvers
+driver/modules.order
+driver/.*.cmd
+driver/.module-common.o
