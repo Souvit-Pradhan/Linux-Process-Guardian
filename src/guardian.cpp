@@ -10,6 +10,7 @@
 #include <thread>
 #include <chrono>
 #include <fcntl.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -227,7 +228,8 @@ int main()
     string driverStatus = getDriverStatus();
 
     cout << "Driver Status    : "
-         << driverStatus;
+         << driverStatus << "\n";
+
     cout << "Collecting CPU information...\n";
     cout << "Please wait 1 second...\n\n";
 
@@ -265,6 +267,12 @@ int main()
             }
         }
     }
+    
+    sort(secondSnapshot.begin(), secondSnapshot.end(),
+     [](const ProcessInfo& a, const ProcessInfo& b)
+     {
+         return a.cpuPercent > b.cpuPercent;
+     });
 
     cout << left
          << setw(8) << "PID"
@@ -292,7 +300,9 @@ int main()
              << setw(12) << fixed << setprecision(2)
              << process.cpuPercent
              << setw(15)
-             << to_string(process.memoryKB) + " KB";
+             << fixed << setprecision(2)
+             << (static_cast<double>(process.memoryKB) / 1024.0)
+             << " MB";
 
         if (process.cpuPercent >= CPU_THRESHOLD)
         {
