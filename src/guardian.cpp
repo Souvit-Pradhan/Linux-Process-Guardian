@@ -192,6 +192,43 @@ vector<ProcessInfo> getProcesses()
     return processes;
 }
 
+double getSystemMemoryUsage()
+{
+    ifstream file("/proc/meminfo");
+
+    if (!file)
+        return 0.0;
+
+    string line;
+
+    long totalMemory = 0;
+    long availableMemory = 0;
+
+    while (getline(file, line))
+    {
+        string label;
+        long value;
+        string unit;
+
+        stringstream ss(line);
+
+        ss >> label >> value >> unit;
+
+        if (label == "MemTotal:")
+            totalMemory = value;
+
+        else if (label == "MemAvailable:")
+            availableMemory = value;
+    }
+
+    if (totalMemory == 0)
+        return 0.0;
+
+    long usedMemory = totalMemory - availableMemory;
+
+    return static_cast<double>(usedMemory) / 1024.0;
+}
+
 string getDriverStatus()
 {
     int fd = open("/dev/procguard", O_RDONLY);
@@ -217,7 +254,11 @@ string getDriverStatus()
 
 int main()
 {
-    cout << "\n";
+    while (true)
+    {
+        system("clear");
+
+        cout << "\n";
     cout << "============================================================\n";
     cout << "                  LINUX PROCESS GUARDIAN\n";
     cout << "============================================================\n";
@@ -225,6 +266,8 @@ int main()
 
     const long MEMORY_THRESHOLD = 500000;
     const double CPU_THRESHOLD = 80.0;
+
+    double systemMemoryUsed = getSystemMemoryUsage();
     string driverStatus = getDriverStatus();
 
     cout << "Driver Status    : "
@@ -356,7 +399,50 @@ int main()
     cout << "Processes found   : "
          << secondSnapshot.size() << "\n";
 
+    cout << "System memory used: "
+         << fixed << setprecision(2)
+         << systemMemoryUsed << " MB\n";
+
+    cout << "\nResource Summary\n";
+    cout << "----------------\n";
+
+    if (!secondSnapshot.empty())
+    {
+        const ProcessInfo& topCPUProcess = secondSnapshot.front();
+
+        cout << "Top CPU process   : "
+             << topCPUProcess.name
+             << " (PID " << topCPUProcess.pid << ")\n";
+
+    cout << "Top CPU usage     : "
+         << fixed << setprecision(2)
+         << topCPUProcess.cpuPercent
+         << "%\n";
+}
+
+auto topMemoryProcess = max_element(
+    secondSnapshot.begin(),
+    secondSnapshot.end(),
+    [](const ProcessInfo& a, const ProcessInfo& b)
+    {
+        return a.memoryKB < b.memoryKB;
+    }
+);
+
+if (topMemoryProcess != secondSnapshot.end())
+    {
+         cout << "Top memory process: "
+              << topMemoryProcess->name
+              << " (PID " << topMemoryProcess->pid << ")\n";
+
+         cout << "Top memory usage  : "
+              << fixed << setprecision(2)
+              << (static_cast<double>(topMemoryProcess->memoryKB) / 1024.0)
+              << " MB\n";
+    }
+
     cout << "\nSystem Status\n";
+
     cout << "-------------\n";
 
     if (warningFound)
@@ -373,10 +459,15 @@ int main()
         cout << "NORMAL: No process exceeded the configured thresholds.\n";
     }
 
-    cout << "\n============================================================\n";
-    cout << "              Process scan completed.\n";
-    cout << "============================================================\n";
-    cout << "\n";
+            cout << "\n============================================================\n";
+        cout << "              Process scan completed.\n";
+        cout << "============================================================\n";
+        cout << "\n";
+
+        cout << "Refreshing in 3 seconds... Press Ctrl+C to stop.\n";
+
+        this_thread::sleep_for(chrono::seconds(3));
+    }
 
     return 0;
 }
