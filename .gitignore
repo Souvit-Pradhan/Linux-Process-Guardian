@@ -10,3 +10,4 @@ driver/Module.symvers
 driver/modules.order
 driver/.*.cmd
 driver/.module-common.o
+src/guardian_backup.cpp
