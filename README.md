@@ -1,48 +1,58 @@
 # Linux Process Guardian
 
-Linux Process Guardian is a lightweight Linux system-monitoring application developed in C++ with a custom Linux kernel character device driver.
-
-The project monitors running processes, CPU usage, memory usage, and system memory. It also communicates with a custom kernel driver through `/dev/procguard`.
+A lightweight Linux system-monitoring application that monitors running processes, tracks CPU and memory usage, detects resource-intensive processes, and communicates with a custom Linux kernel driver.
 
 ## Features
 
-- Lists running Linux processes
-- Displays Process ID (PID)
-- Displays process name
-- Calculates CPU usage
-- Displays process memory usage
-- Sorts processes by CPU usage
-- Identifies the highest CPU-consuming process
-- Identifies the highest memory-consuming process
-- Provides configurable CPU and memory thresholds
-- Generates CPU and memory warnings
-- Displays overall system memory usage
-- Continuously refreshes monitoring information
-- Communicates with a custom Linux kernel character device driver
-- Displays kernel driver connection status
+- Real-time process monitoring
+- CPU usage monitoring
+- Memory usage monitoring
+- CPU and memory threshold warnings
+- Top CPU-consuming process detection
+- Top memory-consuming process detection
+- Continuous monitoring with automatic refresh
+- Custom Linux kernel character-device driver
+- User-space and kernel-space communication
+- Driver status verification through `/dev/procguard`
+- Kernel logging using `dmesg`
 
-## Project Architecture
+## Technologies
+
+- C++17
+- C
+- Linux / Debian
+- Linux `/proc` filesystem
+- Linux Kernel Module
+- Character Device Driver
+- g++
+- Make
+- Git & GitHub
+
+## Architecture
 
 ```text
-+-----------------------------+
-|     C++ Process Monitor     |
-|        guardian.cpp         |
-+--------------+--------------+
-               |
-               | open/read
-               v
-+-----------------------------+
-|       /dev/procguard        |
-+--------------+--------------+
-               |
-               v
-+-----------------------------+
-|    Linux Kernel Driver      |
-|        procguard.c          |
-+-----------------------------+
-               |
-               v
-+-----------------------------+
-|        Linux Kernel         |
-|   Process & System Data     |
-+-----------------------------+
+             Linux Process Guardian
+                      |
+          +-----------+-----------+
+          |                       |
+          ↓                       ↓
+     Linux /proc             Kernel Driver
+          |                       |
+          ↓                       ↓
+ Process Information       /dev/procguard
+          |                       |
+          +-----------+-----------+
+                      |
+                      ↓
+              C++ Monitoring App
+                      |
+          +-----------+-----------+
+          |           |           |
+          ↓           ↓           ↓
+        CPU %      Memory     Threshold
+                   Usage       Detection
+          |           |           |
+          +-----------+-----------+
+                      |
+                      ↓
+               System Status
