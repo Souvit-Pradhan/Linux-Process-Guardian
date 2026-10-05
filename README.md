@@ -74,20 +74,20 @@ The user-space application verifies the driver connection by reading from `/dev/
 
 #  Features
 
-- 🔍 Automatic process discovery
-- 📊 Real-time CPU usage monitoring
-- 💾 Process memory monitoring
-- ⚠️ CPU threshold detection
-- ⚠️ Memory threshold detection
-- 🔝 CPU-based process sorting
-- 📈 System memory usage information
-- 🧩 Linux kernel driver integration
-- 🔗 User-space/kernel-space communication
-- 🔄 Continuous monitoring mode
-- 🖥️ Simple terminal-based interface
-- 📝 Kernel driver activity logging
-- 🛠️ Makefile-based compilation
-- 🌐 Git/GitHub version control
+-  Automatic process discovery
+-  Real-time CPU usage monitoring
+-  Process memory monitoring
+-  CPU threshold detection
+-  Memory threshold detection
+-  CPU-based process sorting
+-  System memory usage information
+-  Linux kernel driver integration
+-  User-space/kernel-space communication
+-  Continuous monitoring mode
+-  Simple terminal-based interface
+-  Kernel driver activity logging
+-  Makefile-based compilation
+-  Git/GitHub version control
 
 ---
 
