@@ -1,4 +1,4 @@
-# 🛡️ Linux Process Guardian
+#  Linux Process Guardian
 
 A lightweight Linux process monitoring system that combines a **C++ user-space application** with a **Linux kernel character device driver** to monitor system processes, CPU usage, memory usage, and resource threshold violations.
 
@@ -6,7 +6,7 @@ The project demonstrates practical Linux system programming concepts such as `/p
 
 ---
 
-## 📌 Overview
+##  Overview
 
 Modern Linux systems run many processes simultaneously, and some processes may consume excessive CPU or memory resources.
 
@@ -25,7 +25,7 @@ The project is designed to be lightweight, easy to understand, and suitable for 
 
 ---
 
-# 🎯 Problem Statement
+#  Problem Statement
 
 Linux systems may run hundreds of processes at the same time. Identifying processes that consume excessive CPU or memory can be difficult using only basic system commands.
 
@@ -40,7 +40,7 @@ There is a need for a lightweight monitoring tool that can:
 
 ---
 
-# 💡 Proposed Solution
+#  Proposed Solution
 
 Linux Process Guardian solves this problem using two main components:
 
@@ -72,7 +72,7 @@ The user-space application verifies the driver connection by reading from `/dev/
 
 ---
 
-# ✨ Features
+#  Features
 
 - 🔍 Automatic process discovery
 - 📊 Real-time CPU usage monitoring
@@ -91,7 +91,7 @@ The user-space application verifies the driver connection by reading from `/dev/
 
 ---
 
-# 🏗️ System Architecture
+#  System Architecture
 
 ```text
                          LINUX OPERATING SYSTEM
